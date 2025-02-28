@@ -2,14 +2,16 @@ import { useState, useRef } from "react";
 
 export const useSpeechRecognition = (onRecordingComplete) => {
   const [isRecording, setIsRecording] = useState(false);
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
-  const streamRef = useRef(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const streamRef = useRef<MediaStream | null>(null);
 
   const toggleRecording = async () => {
     if (isRecording) {
-      mediaRecorderRef.current.stop();
-      streamRef.current.getTracks().forEach((track) => track.stop());
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+      streamRef.current?.getTracks().forEach((track) => track.stop());
       setIsRecording(false);
     } else {
       try {
@@ -41,6 +43,7 @@ export const useSpeechRecognition = (onRecordingComplete) => {
 
         mediaRecorder.start();
         setIsRecording(true);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         setIsRecording(false);
       }

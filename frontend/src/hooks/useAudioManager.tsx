@@ -8,6 +8,7 @@ export const useAudioManager = () => {
   const playAudio = useCallback(async (audioSrc) => {
     if (!audioSrc || !audioRef.current) return;
 
+    // eslint-disable-next-line no-useless-catch
     try {
       audioRef.current.pause();
       audioRef.current.src = '';
