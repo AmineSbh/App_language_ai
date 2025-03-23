@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-export const useSpeechRecognition = (onRecordingComplete) => {
+export const useSpeechRecognition = (onRecordingComplete: (file: File) => void) => {
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -43,9 +43,10 @@ export const useSpeechRecognition = (onRecordingComplete) => {
 
         mediaRecorder.start();
         setIsRecording(true);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
+        console.error("Erreur d'accès au microphone:", error);
         setIsRecording(false);
+        // Informer l'utilisateur de l'erreur
       }
     }
   };
